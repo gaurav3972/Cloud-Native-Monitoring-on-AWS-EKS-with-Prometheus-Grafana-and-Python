@@ -1,0 +1,53 @@
+alertmanager:
+  enabled: true
+
+server:
+  service:
+    type: LoadBalancer
+
+# Add additional scrape targets (our Python app)
+extraScrapeConfigs: |
+  - job_name: 'python-app'
+    scrape_interval: 15s
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - python-app.default.svc.cluster.local:5000
+server:
+  resources:
+    requests:
+      memory: 200Mi
+      cpu: 100m
+
+alertmanager:
+  resources:
+    requests:
+      memory: 100Mi
+      cpu: 50m
+server:
+  persistentVolume:
+    enabled: false
+
+alertmanager:
+  persistentVolume:
+    enabled: false
+prometheus-node-exporter:
+  service:
+    port: 9101
+  containerPort: 9101
+server:
+  additionalScrapeConfigs:
+    - job_name: 'python-app'
+      kubernetes_sd_configs:
+        - role: endpoints
+      relabel_configs:
+        - source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_namespace]
+          action: keep
+          regex: python-app;default
+      metrics_path: /metrics
+      scheme: http
+additionalScrapeConfigs:
+  - job_name: 'python-app'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['python-app:5000']
