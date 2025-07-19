@@ -3,30 +3,8 @@
 ---
 
 ## 🏗️ Infrastructure Overview
+![](https://github.com/gaurav3972/Cloud-Native-Monitoring-on-AWS-EKS-with-Prometheus-Grafana-and-Python/blob/main/images/00.png)
 
-```
-+-------------------------+
-|    AWS Infrastructure  |
-+-------------------------+
-        |
-        ▼
-+-------------------------+
-|     EKS Cluster         |  <-- created via eksctl or Terraform
-|   (Managed K8s)         |
-+-------------------------+
-        |
-        ▼
-+--------------------------+      +-------------------------+
-|  Python Flask App Pod    | ---> |  Prometheus             |
-|  (/metrics endpoint)     |      |  (scrapes app & kube)   |
-+--------------------------+      +-------------------------+
-                                          |
-                                          ▼
-                                  +------------------+
-                                  |     Grafana      |
-                                  |  (visualization) |
-                                  +------------------+
-```
 ## 🔧 Tools & Technologies Used
 
 | Tool                 | Purpose                           |
